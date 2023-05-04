@@ -4,7 +4,23 @@ const Home = () => {
     <div>
       <h1>홈</h1>
       <p>가장 먼저 보여지는 페이지</p>
-      <Link to={"/about"}>소개 페이지</Link>
+      <ul>
+        <li>
+          <Link to={"/about"}>소개 페이지</Link>
+        </li>
+        <li>
+          <Link to={"/profiles/velopert"}>velopert의 프로필</Link>
+        </li>
+        <li>
+          <Link to={"/profiles/james"}>James의 프로필</Link>
+        </li>
+        <li>
+          <Link to={"/profiles/void"}>존재하지 않는 프로필</Link>
+        </li>
+        <li>
+          <Link to={"/articles"}>게시글 목록</Link>
+        </li>
+      </ul>
     </div>
   );
 };
