@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import NewsItem from './NewsItem';
 import axios from 'axios';
+import usePromise from '../lib/usePromise';
+
 const NewsListBlock = styled.div`
   box-sizing: border-box;
   padding-bottom: 3rem;
@@ -16,36 +17,26 @@ const NewsListBlock = styled.div`
   }
 `;
 
-const NewsList = () => {
-  const [articles, setArticles] = useState(null);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    //async를 사용하는 함수 따로 선언 ==> 밖에서 선언하면 안되는가??
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          'https://newsapi.org/v2/top-headlines?country=kr&apiKey=147be53b8931421b8a7f42767654c1c5',
-        );
-        console.log(response.data.articles);
-        setArticles(response.data.articles);
-      } catch (e) {
-        console.log(e);
-      }
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
+const NewsList = ({ category }) => {
+  const [loading, response, error] = usePromise(() => {
+    const query = category === 'all' ? '' : `&category=${category}`;
+    return axios.get(
+      `https://newsapi.org/v2/top-headlines?country=kr${query}&apiKey=147be53b8931421b8a7f42767654c1c5`,
+    );
+  }, [category]);
 
   // API 대기 중일 때
   if (loading) {
     return <NewsListBlock>대기 중.....</NewsListBlock>;
   }
   // 아직 articles 값이 설정되지 않았을 때
-  if (!articles) {
+  if (!response) {
     return null;
   }
-
+  if (error) {
+    return <NewsListBlock>에러 발생!</NewsListBlock>;
+  }
+  const { articles } = response.data;
   return (
     <NewsListBlock>
       {articles.map((article) => (
