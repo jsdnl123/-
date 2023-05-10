@@ -9,7 +9,6 @@ import { Provider } from "react-redux";
 import { devToolsEnhancer } from "@redux-devtools/extension";
 
 const store = createStore(rootReducer, devToolsEnhancer());
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
